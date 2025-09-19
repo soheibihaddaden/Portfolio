@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { dict } from "../i18n";
 
 const FORM_ENDPOINT =
   import.meta.env.VITE_FORM_ENDPOINT || "https://formsubmit.co/ajax/ihaddadensoheib@gmail.com";
@@ -9,7 +10,7 @@ const contractOptions = [
   { value: "cdd", label: "CDD" },
 ];
 
-export default function SectionContact() {
+export default function SectionContact({ lang = "fr" }) {
   const initialFormValues = {
     firstName: "",
     lastName: "",
@@ -52,7 +53,7 @@ export default function SectionContact() {
     if (!formValues.email || !formValues.message) {
       setStatus({
         type: "error",
-        message: "Merci de renseigner au minimum votre email et un message.",
+        message: dict[lang]?.contact?.errorRequired || dict.fr.contact.errorRequired,
       });
       return;
     }
@@ -90,7 +91,7 @@ export default function SectionContact() {
 
       setStatus({
         type: "success",
-        message: "Merci ! Votre message a bien été envoyé.",
+        message: dict[lang]?.contact?.success || dict.fr.contact.success,
       });
       setFormValues(initialFormValues);
       setContractType("");
@@ -100,7 +101,7 @@ export default function SectionContact() {
       const message =
         error instanceof Error && error.message
           ? error.message
-          : "Une erreur est survenue lors de l'envoi. Merci de réessayer ou de me contacter directement.";
+          : dict[lang]?.contact?.errorGeneric || dict.fr.contact.errorGeneric;
       setStatus({
         type: "error",
         message,
@@ -119,10 +120,8 @@ export default function SectionContact() {
     <section id="contact" className="hire-section">
       <form onSubmit={handleSubmit} className="hire-form">
         <div className="hire-section__intro">
-          <span className="hire-section__title">Travaillons ensemble</span>
-          <span className="hire-section__lead">
-            Veuillez remplir le formulaire ci-dessous pour me contacter.
-          </span>
+          <span className="hire-section__title">{dict[lang]?.contact?.title || dict.fr.contact.title}</span>
+          <span className="hire-section__lead">{dict[lang]?.contact?.lead || dict.fr.contact.lead}</span>
         </div>
 
         <div className="hire-form__grid">
@@ -130,7 +129,7 @@ export default function SectionContact() {
             <input
               type="text"
               name="firstName"
-              placeholder="Prénom"
+              placeholder={dict[lang]?.contact?.placeholders?.firstName || dict.fr.contact.placeholders.firstName}
               className="hire-input"
               value={formValues.firstName}
               onChange={handleChange}
@@ -140,7 +139,7 @@ export default function SectionContact() {
             <input
               type="text"
               name="lastName"
-              placeholder="Nom de famille"
+              placeholder={dict[lang]?.contact?.placeholders?.lastName || dict.fr.contact.placeholders.lastName}
               className="hire-input"
               value={formValues.lastName}
               onChange={handleChange}
@@ -153,7 +152,7 @@ export default function SectionContact() {
             <input
               type="email"
               name="email"
-              placeholder="Adresse mail"
+              placeholder={dict[lang]?.contact?.placeholders?.email || dict.fr.contact.placeholders.email}
               className="hire-input"
               value={formValues.email}
               onChange={handleChange}
@@ -163,7 +162,7 @@ export default function SectionContact() {
             <input
               type="tel"
               name="phone"
-              placeholder="Numéro de téléphone"
+              placeholder={dict[lang]?.contact?.placeholders?.phone || dict.fr.contact.placeholders.phone}
               className="hire-input"
               value={formValues.phone}
               onChange={handleChange}
@@ -172,7 +171,7 @@ export default function SectionContact() {
         </div>
 
         <label className="hire-form__label">
-          <span>Type de collaboration</span>
+          <span>{dict[lang]?.contact?.selectLabel || dict.fr.contact.selectLabel}</span>
           <div
             className={`hire-select${selectOpen ? " is-open" : ""}`}
             ref={selectRef}
@@ -183,7 +182,9 @@ export default function SectionContact() {
               onClick={() => setSelectOpen((openState) => !openState)}
             >
               <span>
-                {selectedOption ? selectedOption.label : "Choisissez une option"}
+                {selectedOption
+                  ? (dict[lang]?.contact?.options?.[selectedOption.value] || selectedOption.label)
+                  : (lang === 'en' ? 'Choose an option' : 'Choisissez une option')}
               </span>
               <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
@@ -209,7 +210,7 @@ export default function SectionContact() {
                         setSelectOpen(false);
                       }}
                     >
-                      {option.label}
+                      {dict[lang]?.contact?.options?.[option.value] || option.label}
                     </button>
                   </li>
                 ))}
@@ -222,7 +223,7 @@ export default function SectionContact() {
           <textarea
             name="message"
             rows={5}
-            placeholder="Tapez votre message"
+            placeholder={dict[lang]?.contact?.placeholders?.message || dict.fr.contact.placeholders.message}
             className="hire-input hire-form__textarea"
             value={formValues.message}
             onChange={handleChange}
@@ -232,7 +233,9 @@ export default function SectionContact() {
         {status.type !== "idle" && <div className={statusClassName}>{status.message}</div>}
 
         <button type="submit" className="hire-form__submit" disabled={isSubmitting}>
-          {isSubmitting ? "Envoi en cours..." : "Envoyer"}
+          {isSubmitting
+            ? (dict[lang]?.contact?.sending || dict.fr.contact.sending)
+            : (dict[lang]?.contact?.submit || dict.fr.contact.submit)}
         </button>
       </form>
     </section>
