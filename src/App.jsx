@@ -5,7 +5,6 @@ import SectionHero from "./components/SectionHero";
 import SectionCV from "./components/SectionCV";
 import SectionWork from "./components/SectionWork";
 import SectionContact from "./components/SectionContact";
-import SectionHireMe from "./components/SectionHireMe";
 import Page from "./components/Page";
 
 export default function App() {
@@ -14,7 +13,12 @@ export default function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const initialHash = window.location.hash?.slice(1);
-    if (initialHash && ["home", "cv", "work", "contact", "hire-me"].includes(initialHash)) {
+    const allowed = ["home", "cv", "work", "contact"];
+    if (initialHash === "hire-me") {
+      setActiveSection("contact");
+      return;
+    }
+    if (initialHash && allowed.includes(initialHash)) {
       setActiveSection(initialHash);
     }
   }, []);
@@ -25,7 +29,7 @@ export default function App() {
       { label: "CV", href: "#cv" },
       { label: "Travail", href: "#work" },
       { label: "Contact", href: "#contact" },
-      { label: "Embauchez-moi", href: "#hire-me" },
+      { label: "Embauchez-moi", href: "#contact" },
     ],
     []
   );
@@ -38,8 +42,6 @@ export default function App() {
         return <SectionWork />;
       case "contact":
         return <SectionContact />;
-      case "hire-me":
-        return <SectionHireMe />;
       case "home":
       default:
         return <SectionHero />;
