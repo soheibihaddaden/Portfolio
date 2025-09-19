@@ -1,31 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-const inputStyle = {
-  width: "100%",
-  padding: "14px 18px",
-  borderRadius: 12,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(17,17,21,0.9)",
-  color: "#fff",
-  fontSize: "1rem",
-  transition: "border 0.2s ease, box-shadow 0.2s ease",
-  outline: "none",
-  boxSizing: "border-box",
-};
-
-const labelStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: 8,
-  width: "100%",
-  fontSize: "0.95rem",
-};
-
-const twoColumnRow = {
-  display: "grid",
-  gap: 16,
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-};
+const FORM_ENDPOINT =
+  import.meta.env.VITE_FORM_ENDPOINT || "https://formsubmit.co/ajax/ihaddadensoheib@gmail.com";
 
 const contractOptions = [
   { value: "cdi", label: "CDI" },
@@ -34,8 +10,20 @@ const contractOptions = [
 ];
 
 export default function SectionHireMe() {
+  const initialFormValues = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    message: "",
+  };
+
+  const [formValues, setFormValues] = useState(initialFormValues);
   const [contractType, setContractType] = useState("");
   const [selectOpen, setSelectOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: "idle", message: "" });
+
   const selectRef = useRef(null);
 
   useEffect(() => {
@@ -45,90 +33,145 @@ export default function SectionHireMe() {
         setSelectOpen(false);
       }
     };
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
-        setSelectOpen(false);
-      }
-    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const selectedOption = contractOptions.find((opt) => opt.value === contractType);
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setStatus({ type: "idle", message: "" });
+
+    if (!formValues.email || !formValues.message) {
+      setStatus({
+        type: "error",
+        message: "Merci de renseigner au minimum votre email et un message.",
+      });
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          first_name: formValues.firstName,
+          last_name: formValues.lastName,
+          email: formValues.email,
+          phone: formValues.phone,
+          contract_type: selectedOption ? selectedOption.label : "Non précisé",
+          message: formValues.message,
+          _subject: `Demande via le portfolio (${selectedOption ? selectedOption.label : "Non précisé"})`,
+          _replyto: formValues.email,
+          _captcha: "false",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`FormSubmit error ${response.status}`);
+      }
+
+      const result = await response.json();
+      const isSuccess = result?.success === "true" || result?.success === true;
+      if (!isSuccess) {
+        throw new Error(result?.message || "FormSubmit response unexpected");
+      }
+
+      setStatus({
+        type: "success",
+        message: "Merci ! Votre message a bien été envoyé.",
+      });
+      setFormValues(initialFormValues);
+      setContractType("");
+      setSelectOpen(false);
+    } catch (error) {
+      console.error("Form submission error", error);
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : "Une erreur est survenue lors de l'envoi. Merci de réessayer ou de me contacter directement.";
+      setStatus({
+        type: "error",
+        message,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const statusClassName =
+    status.type === "idle"
+      ? "hire-form__status"
+      : `hire-form__status ${status.type === "success" ? "is-success" : "is-error"}`;
+
   return (
-    <section
-      id="hire-me"
-      style={{
-        maxWidth: 700,
-        margin: "0 auto",
-        padding: "64px 24px 96px",
-      }}
-    >
-      <form
-        style={{
-          display: "grid",
-          gap: 20,
-          padding: 24,
-          borderRadius: 20,
-          background: "rgba(28, 28, 34, 0.8)",
-          border: "1px solid rgba(255,255,255,0.06)",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
-        }}
-      >
-        <div style={{ display: "grid", gap: 8 }}>
-          <p style={{ fontWeight: 700, color: "#34e4ea", fontSize: "1.8rem", margin: 0 }}>
-            Travaillons ensemble
-          </p>
-          <p style={{ color: "#fff", opacity: 0.85, fontWeight: 400, margin: 0 }}>
+    <section id="hire-me" className="hire-section">
+      <form onSubmit={handleSubmit} className="hire-form">
+        <div className="hire-section__intro">
+          <span className="hire-section__title">Travaillons ensemble</span>
+          <span className="hire-section__lead">
             Veuillez remplir le formulaire ci-dessous pour me contacter.
-          </p>
+          </span>
         </div>
 
-        <div style={twoColumnRow}>
-          <label style={labelStyle}>
+        <div className="hire-form__grid">
+          <label className="hire-form__label">
             <input
               type="text"
               name="firstName"
               placeholder="Prénom"
-              style={inputStyle}
+              className="hire-input"
+              value={formValues.firstName}
+              onChange={handleChange}
             />
           </label>
-          <label style={labelStyle}>
+          <label className="hire-form__label">
             <input
               type="text"
               name="lastName"
               placeholder="Nom de famille"
-              style={inputStyle}
+              className="hire-input"
+              value={formValues.lastName}
+              onChange={handleChange}
             />
           </label>
         </div>
 
-        <div style={twoColumnRow}>
-          <label style={labelStyle}>
+        <div className="hire-form__grid">
+          <label className="hire-form__label">
             <input
               type="email"
               name="email"
               placeholder="Adresse mail"
-              style={inputStyle}
+              className="hire-input"
+              value={formValues.email}
+              onChange={handleChange}
             />
           </label>
-          <label style={labelStyle}>
+          <label className="hire-form__label">
             <input
               type="tel"
               name="phone"
               placeholder="Numéro de téléphone"
-              style={inputStyle}
+              className="hire-input"
+              value={formValues.phone}
+              onChange={handleChange}
             />
           </label>
         </div>
 
-        <label style={labelStyle}>
+        <label className="hire-form__label">
           <span>Type de collaboration</span>
           <div
             className={`hire-select${selectOpen ? " is-open" : ""}`}
@@ -136,25 +179,13 @@ export default function SectionHireMe() {
           >
             <button
               type="button"
-              className="hire-select__trigger"
-              onClick={() => setSelectOpen((open) => !open)}
-              onKeyDown={(event) => {
-                if (["ArrowDown", "ArrowUp", " ", "Enter"].includes(event.key)) {
-                  event.preventDefault();
-                  setSelectOpen(true);
-                }
-              }}
+              className="hire-select__trigger hire-input"
+              onClick={() => setSelectOpen((openState) => !openState)}
             >
               <span>
                 {selectedOption ? selectedOption.label : "Choisissez une option"}
               </span>
-              <svg
-                aria-hidden="true"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3.5 6l4.5 4.5L12.5 6"
                   stroke="currentColor"
@@ -170,17 +201,12 @@ export default function SectionHireMe() {
                   <li key={option.value}>
                     <button
                       type="button"
-                      className={`hire-select__option${contractType === option.value ? " is-active" : ""}`}
+                      className={`hire-select__option${
+                        contractType === option.value ? " is-active" : ""
+                      }`}
                       onClick={() => {
                         setContractType(option.value);
                         setSelectOpen(false);
-                      }}
-                      onKeyDown={(event) => {
-                        if (["Enter", " "].includes(event.key)) {
-                          event.preventDefault();
-                          setContractType(option.value);
-                          setSelectOpen(false);
-                        }
                       }}
                     >
                       {option.label}
@@ -189,36 +215,24 @@ export default function SectionHireMe() {
                 ))}
               </ul>
             )}
-            <input type="hidden" name="contractType" value={contractType} />
           </div>
         </label>
 
-        <label style={labelStyle}>
+        <label className="hire-form__label">
           <textarea
             name="message"
             rows={5}
             placeholder="Tapez votre message"
-            style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+            className="hire-input hire-form__textarea"
+            value={formValues.message}
+            onChange={handleChange}
           />
         </label>
 
-        <button
-          type="submit"
-          style={{
-            marginTop: 8,
-            padding: "14px 22px",
-            borderRadius: 999,
-            background: "#34e4ea",
-            color: "#1c1c22",
-            fontWeight: 600,
-            fontSize: "1.05rem",
-            border: "none",
-            cursor: "pointer",
-            transition: "transform 0.2s ease",
-            width: "100%",
-          }}
-        >
-          Envoyer
+        {status.type !== "idle" && <div className={statusClassName}>{status.message}</div>}
+
+        <button type="submit" className="hire-form__submit" disabled={isSubmitting}>
+          {isSubmitting ? "Envoi en cours..." : "Envoyer"}
         </button>
       </form>
     </section>

@@ -68,6 +68,7 @@ export default function App() {
           glass={false} 
           activeSection={activeSection}
           onNavigate={setActiveSection}
+    
         />
         {renderSection()}
       </Page>
