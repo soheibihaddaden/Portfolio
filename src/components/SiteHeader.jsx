@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logo from "../logo.svg";
 
 export default function SiteHeader({
   title = "Mon Portfolio",
@@ -12,6 +13,8 @@ export default function SiteHeader({
   glass = false,
   activeSection = "home",
   onNavigate,
+  lang = 'fr',
+  onToggleLang,
 }) {
   const [open, setOpen] = useState(false);
 
@@ -34,9 +37,14 @@ export default function SiteHeader({
   };
 
   const handleLinkClick = (event, href, shouldClose = false) => {
-    if (!onNavigate) return;
     event.preventDefault();
-    onNavigate(getSectionId(href));
+    const dest = getSectionId(href);
+    // Si on est déjà sur la même section, ne pas déclencher l'animation
+    if (dest === activeSection) {
+      if (shouldClose) setOpen(false);
+      return;
+    }
+    if (onNavigate) onNavigate(dest);
     if (shouldClose) setOpen(false);
   };
 
@@ -47,13 +55,13 @@ export default function SiteHeader({
           href="#home"
           className="site-header__brand"
           onClick={(event) => {
-            if (!onNavigate) return;
             event.preventDefault();
-            onNavigate("home");
+            if (activeSection === "home") return;
+            if (onNavigate) onNavigate("home");
             setOpen(false);
           }}
         >
-          {title}
+          <img src={logo} alt={title} className="brand-logo" />
         </a>
 
         <nav className="site-header__nav">
@@ -63,14 +71,23 @@ export default function SiteHeader({
               <a
                 key={l.href}
                 href={l.href}
-                className={buildLinkClass(sectionId)}
+                className={`${buildLinkClass(sectionId)} ${l.cta ? 'header-link--cta bubbles' : ''}`}
                 onClick={(event) => handleLinkClick(event, l.href)}
                 aria-current={sectionId === activeSection ? "page" : undefined}
               >
-                {l.label}
+                {l.cta ? <span className="text">{l.label}</span> : l.label}
               </a>
             );
           })}
+          {/* Language toggle: shows the opposite flag (target language) */}
+          <button
+            type="button"
+            className="header-link lang-toggle"
+            aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
+            onClick={onToggleLang}
+          >
+            <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+          </button>
         </nav>
 
         <button
@@ -82,8 +99,8 @@ export default function SiteHeader({
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
+            width="36"
+            height="36"
             viewBox="0 0 24 24"
             fill="none"
             stroke="#34e4ea"
@@ -109,14 +126,22 @@ export default function SiteHeader({
                 <a
                   key={l.href}
                   href={l.href}
-                  className={`${buildLinkClass(sectionId)} header-link--mobile`}
+                  className={`${buildLinkClass(sectionId)} header-link--mobile ${l.cta ? 'header-link--cta bubbles' : ''}`}
                   onClick={(event) => handleLinkClick(event, l.href, true)}
                   aria-current={sectionId === activeSection ? "page" : undefined}
                 >
-                  {l.label}
+                  {l.cta ? <span className="text">{l.label}</span> : l.label}
                 </a>
               );
             })}
+            <button
+              type="button"
+              className="header-link header-link--mobile lang-toggle"
+              aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
+              onClick={() => { onToggleLang && onToggleLang(); setOpen(false); }}
+            >
+              <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+            </button>
           </nav>
         </div>
       )}

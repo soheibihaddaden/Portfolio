@@ -1,5 +1,5 @@
 :root {
-  --font-family: 'Poppins', sans-serif;
+  --font-family: 'Times New Roman', Times, serif;
   --color-bg: #1c1c22;
   --color-surface: rgba(28, 28, 34, 0.85);
   --color-border: rgba(255, 255, 255, 0.12);
@@ -54,7 +54,7 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding-block: 12px;
+  padding-block: 8px;
   background: transparent;
 }
 
@@ -70,23 +70,62 @@ textarea {
   padding-inline: clamp(16px, 5vw, 48px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* control space between brand and nav explicitly */
   gap: clamp(16px, 4vw, 32px);
   color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .site-header__brand {
-  font-weight: 700;
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-  letter-spacing: 0.4px;
+  /* Brand is an image; make container control height and crop extra space */
+  display: inline-block;
+  height: clamp(84px, 11.4vw, 118px);
+  line-height: 0; /* remove inline element line box gap */
   text-decoration: none;
+  overflow: hidden; /* enables cropping if SVG has big viewBox paddings */
+  margin-left: 0;
+  margin-right: clamp(24px, 6vw, 80px); /* spacing between logo and nav */
 }
+
+.brand-svg {
+  display: block;
+  width: clamp(150px, 18vw, 240px);
+  height: auto;
+}
+
+
+.brand-logo {
+  display: block;
+  height: 100%;
+  width: auto; /* scale based on height */
+  /* Trim top whitespace inside the SVG by shifting up a bit */
+  transform: translateY(-1%);
+}
+
+/* (removed custom brand logo styles) */
 
 .site-header__nav {
   display: flex;
   gap: clamp(12px, 2vw, 20px);
   align-items: center;
+  margin-left: auto; /* push nav group to the right */
+}
+
+.lang-toggle {
+  gap: 8px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-dark);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .site-header__menu-toggle {
@@ -134,21 +173,117 @@ textarea {
   background: var(--color-accent);
   color: var(--color-dark);
   opacity: 1;
+  font-weight: 700; /* make active link bold */
 }
 
 .header-link--mobile {
   width: 100%;
 }
 
+/* CTA: Embauchez-moi */
+.header-link--cta {
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  background:
+    linear-gradient(90deg, var(--color-accent), var(--color-accent)) no-repeat,
+    var(--color-bg);
+  background-size: 0% 100%, 100% 100%;
+  background-position: right center, center;
+  transition: background-size 0.35s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.header-link--cta:hover,
+.header-link--cta:focus-visible {
+  color: var(--color-bg);
+  border-color: var(--color-bg);
+  background-size: 100% 100%, 100% 100%;
+  background-position: left center, center;
+}
+
+/* Ne pas appliquer le style "is-active" turquoise plein au CTA */
+.header-link--cta.is-active {
+  background:
+    linear-gradient(90deg, var(--color-accent), var(--color-accent)) no-repeat,
+    var(--color-bg);
+  background-size: 0% 100%, 100% 100%;
+  background-position: right center, center;
+  color: var(--color-accent);
+}
+
+/* Bubbles effect for CTA (Uiverse-inspired) */
+.header-link--cta.bubbles {
+  --c1: var(--color-bg);
+  --c2: var(--color-accent);
+  position: relative;
+  overflow: hidden;
+  background: transparent !important;
+  border: 3px solid var(--c2);
+  border-radius: 999px; /* rounded like other header items */
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: transform 300ms cubic-bezier(0.83, 0, 0.17, 1),
+              filter 300ms cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.header-link--cta.bubbles > .text {
+  font-weight: 700;
+  color: var(--c2);
+  position: relative;
+  z-index: 1;
+  transition: color 700ms cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.header-link--cta.bubbles::before,
+.header-link--cta.bubbles::after {
+  content: "";
+  width: 150%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--c2);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 1000ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.header-link--cta.bubbles::before { top: 0; left: 0; }
+.header-link--cta.bubbles::after  { top: 100%; left: 100%; }
+
+.header-link--cta.bubbles:hover > .text { color: var(--c1); }
+.header-link--cta.bubbles:hover::before,
+.header-link--cta.bubbles:hover::after { transform: translate(-50%, -50%) scale(1); }
+
+/* Ensure default CTA hover styles don't override bubbles */
+.header-link--cta.bubbles:hover,
+.header-link--cta.bubbles:focus-visible {
+  background: transparent !important;
+  border-color: var(--c2);
+  color: inherit;
+}
+
+/* Keep bubble style when link is the active page */
+.header-link--cta.bubbles.is-active {
+  background: transparent !important;
+  color: var(--c2);
+  border-color: var(--c2);
+}
+
+.header-link--cta.bubbles:active { transform: scale(0.98); filter: brightness(0.9); }
+
 @media (max-width: 900px) {
-  .site-header__nav {
-    display: none;
-  }
+  .site-header__nav { display: none; }
+
+  /* Space out brand and menu on mobile */
+  .site-header__bar { justify-content: space-between; }
 
   .site-header__menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin-left: auto; /* push to far right when nav is hidden */
+  }
+
+  .site-header__brand {
+    margin-right: clamp(16px, 6vw, 40px); /* extra gap only on mobile */
   }
 }
 
@@ -156,6 +291,63 @@ textarea {
   .site-header__drawer {
     display: none !important;
   }
+}
+
+/* Header icon overrides */
+.site-header__menu-toggle:hover,
+.site-header__menu-toggle:focus,
+.site-header__menu-toggle:focus-visible {
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+/* Language toggle: no hover effect, larger flag */
+.lang-toggle:hover,
+.lang-toggle:focus,
+.lang-toggle:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-dark);
+  border-color: transparent;
+  opacity: 1;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* Shimmer sweep on hover (keeps the same accent color) */
+.lang-toggle::after {
+  content: "";
+  position: absolute;
+  inset: -40% -120%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-60%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.lang-toggle:hover::after,
+.lang-toggle:focus-visible::after {
+  transform: translateX(110%);
+}
+
+.lang-toggle .fi {
+  font-size: 1.35rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.lang-toggle:hover .fi,
+.lang-toggle:focus-visible .fi {
+  transform: scale(1.08);
+}
+
+.lang-toggle .fi {
+  font-size: 1.35rem;
+  line-height: 1;
 }
 
 /* Hire me section */
@@ -374,3 +566,54 @@ textarea {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* Page transition overlay */
+/* Legacy single-sheet (kept unused) */
+.page-transition { display: none; }
+
+/* New chunked page transition */
+.page-chunks {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.page-chunks.is-visible { opacity: 1; }
+
+.page-chunks .piece {
+  transform: translateY(100%);
+  transition: transform 0.55s cubic-bezier(0.74, 0.04, 0.26, 1);
+  will-change: transform;
+}
+
+/* Blue IN: rise from bottom, start at right -> left */
+.page-chunks--in .piece { background: var(--color-accent); }
+.page-chunks--in.is-active .piece { transform: translateY(0); }
+.page-chunks--in .piece:nth-child(6) { transition-delay: 0ms; }
+.page-chunks--in .piece:nth-child(5) { transition-delay: 80ms; }
+.page-chunks--in .piece:nth-child(4) { transition-delay: 160ms; }
+.page-chunks--in .piece:nth-child(3) { transition-delay: 240ms; }
+.page-chunks--in .piece:nth-child(2) { transition-delay: 320ms; }
+.page-chunks--in .piece:nth-child(1) { transition-delay: 400ms; }
+
+/* Grey OUT: slide down to reveal, start at left -> right */
+.page-chunks--out .piece {
+  background: var(--color-bg);
+  transform: translateY(-100%); /* start above, on blue */
+}
+.page-chunks--out.is-active .piece { transform: translateY(100%); }
+/* left -> right */
+.page-chunks--out .piece:nth-child(1) { transition-delay: 0ms; }
+.page-chunks--out .piece:nth-child(2) { transition-delay: 80ms; }
+.page-chunks--out .piece:nth-child(3) { transition-delay: 160ms; }
+.page-chunks--out .piece:nth-child(4) { transition-delay: 240ms; }
+.page-chunks--out .piece:nth-child(5) { transition-delay: 320ms; }
+.page-chunks--out .piece:nth-child(6) { transition-delay: 400ms; }
+
+/* Hold the blue overlay in place while grey animates */
+.page-chunks--in.is-hold .piece { transform: translateY(0); }
