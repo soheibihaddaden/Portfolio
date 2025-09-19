@@ -1,6 +1,6 @@
 export default function Page({ children, color = "#fff" }) {
   return (
-    <main style={{ position: "relative", minHeight: "100vh", color }}>
+    <main className="page" style={{ color }}>
       {children}
     </main>
   );

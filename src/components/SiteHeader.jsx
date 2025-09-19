@@ -15,7 +15,6 @@ export default function SiteHeader({
 }) {
   const [open, setOpen] = useState(false);
 
-
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 900) setOpen(false);
@@ -24,46 +23,7 @@ export default function SiteHeader({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const headerStyle = {
-    position: "sticky",
-    top: 0,
-    zIndex: 10,
-    background: glass ? "rgba(0,0,0,0.3)" : "transparent",
-    backdropFilter: glass ? "blur(6px)" : "none",
-    WebkitBackdropFilter: glass ? "blur(6px)" : "none",
-    borderBottom: "none", 
-    paddingTop: 12,
-    paddingBottom: 12,
-  };
-
-  const containerStyle = {
-    maxWidth: 1100,
-    margin: "0 auto",
-    padding: "16px 24px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    gap: 32,
-    color: "#fff",
-    textShadow: "0 1px 2px rgba(0,0,0,.35)", 
-  };
-
-  const brandStyle = {
-    fontWeight: 700,
-    fontSize: "1.5rem",
-    letterSpacing: ".4px",
-    textDecoration: "none",
-    color: "inherit",
-  };
-
-  const navStyle = {
-    display: "flex",
-    gap: 16,
-    alignItems: "center",
-  };
-
-  // Menu mobile
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 900;
+  const headerClassName = glass ? "site-header site-header--glass" : "site-header";
 
   const getSectionId = (href) => (href?.startsWith("#") ? href.slice(1) : href);
 
@@ -81,20 +41,11 @@ export default function SiteHeader({
   };
 
   return (
-    <header style={headerStyle}>
-      <div
-        style={{
-          ...containerStyle,
-          justifyContent: isMobile ? "space-between" : containerStyle.justifyContent,
-          gap: isMobile ? 12 : containerStyle.gap,
-        }}
-      >
+    <header className={headerClassName}>
+      <div className="site-header__bar">
         <a
           href="#home"
-          style={{
-            ...brandStyle,
-            marginRight: isMobile ? "auto" : 0,
-          }}
+          className="site-header__brand"
           onClick={(event) => {
             if (!onNavigate) return;
             event.preventDefault();
@@ -105,8 +56,7 @@ export default function SiteHeader({
           {title}
         </a>
 
-        {/* Desktop nav */}
-        <nav style={{ ...navStyle, display: isMobile ? "none" : "flex" }}>
+        <nav className="site-header__nav">
           {links.map((l) => {
             const sectionId = getSectionId(l.href);
             return (
@@ -123,42 +73,36 @@ export default function SiteHeader({
           })}
         </nav>
 
-        {/* Burger mobile */}
         <button
           aria-label="Menu"
+          className="site-header__menu-toggle"
+          aria-expanded={open}
+          aria-controls="mobile-nav"
           onClick={() => setOpen((o) => !o)}
-          style={{
-            display: isMobile ? "inline-flex" : "none",
-            border: "1px solid rgba(255,255,255,.25)",
-            background: "rgba(0,0,0,.25)",
-            color: "#fff",
-            padding: "6px 10px",
-            borderRadius: 10,
-          }}
         >
-          ☰
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#34e4ea"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 5h18" />
+            <path d="M3 12h18" />
+            <path d="M3 19h18" />
+          </svg>
+          <span className="visually-hidden">Ouvrir le menu</span>
         </button>
       </div>
 
-      {/* Drawer mobile */}
       {open && (
-        <div
-          style={{
-            display: isMobile ? "block" : "none",
-            background: "rgba(0,0,0,0.5)",
-            backdropFilter: "blur(6px)",
-            WebkitBackdropFilter: "blur(6px)",
-          }}
-        >
-          <nav
-            style={{
-              maxWidth: 1100,
-              margin: "0 auto",
-              padding: "8px 16px 16px",
-              display: "grid",
-              gap: 8,
-            }}
-          >
+        <div className="site-header__drawer">
+          <nav className="site-header__drawer-nav" id="mobile-nav">
             {links.map((l) => {
               const sectionId = getSectionId(l.href);
               return (
@@ -168,7 +112,6 @@ export default function SiteHeader({
                   className={`${buildLinkClass(sectionId)} header-link--mobile`}
                   onClick={(event) => handleLinkClick(event, l.href, true)}
                   aria-current={sectionId === activeSection ? "page" : undefined}
-                  style={{ display: "block" }}
                 >
                   {l.label}
                 </a>
