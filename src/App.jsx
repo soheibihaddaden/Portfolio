@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import StarsBG from "./style";
+import logoAnim from "./logo_anim.svg";
 import SiteHeader from "./components/SiteHeader";
 import SectionHero from "./components/SectionHero";
 import SectionCV from "./components/SectionCV";
@@ -79,7 +80,7 @@ export default function App() {
         return <SectionContact />;
       case "home":
       default:
-        return <SectionHero />;
+        return <SectionHero lang={lang} />;
     }
   };
 
@@ -132,6 +133,8 @@ export default function App() {
         <span className="piece" />
         <span className="piece" />
         <span className="piece" />
+        {/* Centered logo that appears on blue transition and grows big */}
+        <img src={logoAnim} className="logo-anim" alt="" aria-hidden="true" />
       </div>
       <div
         className={`page-chunks page-chunks--out ${stage === "mid" ? "is-visible is-active" : stage === "out" ? "is-visible is-active" : ""}`}

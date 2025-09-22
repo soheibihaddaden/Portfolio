@@ -1,5 +1,12 @@
 export const dict = {
   fr: {
+    hero: {
+      hello: 'Bonjour,',
+      iam: 'je suis',
+      name: 'Ihaddaden Soheib',
+      bio: "je suis étudiant à l'université de Paris Cité avec un fort intérêt pour les réseaux et la cybersécurité, avec de bonnes bases aussi en développement.",
+      ctas: { download: 'Télécharger CV', github: 'GitHub', linkedin: 'LinkedIn' },
+    },
     nav: {
       home: 'Accueil',
       cv: 'CV',
@@ -27,6 +34,13 @@ export const dict = {
     },
   },
   en: {
+    hero: {
+      hello: 'Hello,',
+      iam: 'I am',
+      name: 'Ihaddaden Soheib',
+      bio: 'I am a student at Université Paris Cité, highly interested in networking and cybersecurity, with solid fundamentals in software development.',
+      ctas: { download: 'Download CV', github: 'GitHub', linkedin: 'LinkedIn' },
+    },
     nav: {
       home: 'Home',
       cv: 'Resume',
@@ -54,4 +68,3 @@ export const dict = {
     },
   },
 };
-

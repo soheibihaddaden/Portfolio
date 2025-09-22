@@ -82,11 +82,13 @@ export default function SiteHeader({
           {/* Language toggle: shows the opposite flag (target language) */}
           <button
             type="button"
-            className="header-link lang-toggle"
+            className="header-link lang-toggle bubbles"
             aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
             onClick={onToggleLang}
           >
-            <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+            <span className="text">
+              <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+            </span>
           </button>
         </nav>
 
@@ -136,11 +138,13 @@ export default function SiteHeader({
             })}
             <button
               type="button"
-              className="header-link header-link--mobile lang-toggle"
+              className="header-link header-link--mobile lang-toggle bubbles"
               aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
               onClick={() => { onToggleLang && onToggleLang(); setOpen(false); }}
             >
-              <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+              <span className="text">
+                <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+              </span>
             </button>
           </nav>
         </div>
