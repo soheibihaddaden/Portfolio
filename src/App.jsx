@@ -39,9 +39,8 @@ export default function App() {
   }, [lang]);
 
   const handleNavigate = (section) => {
-    if (stage !== "idle") return;
     const next = section || "home";
-    if (next === activeSection) return;
+    if (next === activeSection || stage !== "idle") return;
     // Blue IN
     setStage("in");
     const IN_TOTAL = 900; // 6 * 80ms delay + 550ms anim approx
@@ -133,11 +132,17 @@ export default function App() {
         <span className="piece" />
         <span className="piece" />
         <span className="piece" />
-        {/* Centered logo that appears on blue transition and grows big */}
+        {}
         <img src={logoAnim} className="logo-anim" alt="" aria-hidden="true" />
       </div>
       <div
-        className={`page-chunks page-chunks--out ${stage === "mid" ? "is-visible is-active" : stage === "out" ? "is-visible is-active" : ""}`}
+        className={`page-chunks page-chunks--out ${
+          stage === "mid"
+            ? "is-visible is-active"
+            : stage === "out"
+            ? "is-visible is-active"
+            : ""
+        }`}
         aria-hidden="true"
       >
         <span className="piece" />
