@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import StarsBG from "./style";
+import logoAnim from "./logo_anim.svg";
 import SiteHeader from "./components/SiteHeader";
 import SectionHero from "./components/SectionHero";
 import SectionCV from "./components/SectionCV";
@@ -38,9 +39,8 @@ export default function App() {
   }, [lang]);
 
   const handleNavigate = (section) => {
-    if (stage !== "idle") return;
     const next = section || "home";
-    if (next === activeSection) return;
+    if (next === activeSection || stage !== "idle") return;
     // Blue IN
     setStage("in");
     const IN_TOTAL = 900; // 6 * 80ms delay + 550ms anim approx
@@ -79,7 +79,7 @@ export default function App() {
         return <SectionContact />;
       case "home":
       default:
-        return <SectionHero />;
+        return <SectionHero lang={lang} />;
     }
   };
 
@@ -132,9 +132,17 @@ export default function App() {
         <span className="piece" />
         <span className="piece" />
         <span className="piece" />
+        {}
+        <img src={logoAnim} className="logo-anim" alt="" aria-hidden="true" />
       </div>
       <div
-        className={`page-chunks page-chunks--out ${stage === "mid" ? "is-visible is-active" : stage === "out" ? "is-visible is-active" : ""}`}
+        className={`page-chunks page-chunks--out ${
+          stage === "mid"
+            ? "is-visible is-active"
+            : stage === "out"
+            ? "is-visible is-active"
+            : ""
+        }`}
         aria-hidden="true"
       >
         <span className="piece" />

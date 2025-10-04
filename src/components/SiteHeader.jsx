@@ -26,9 +26,37 @@ export default function SiteHeader({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  useEffect(() => {
+    if (!open) return undefined;
+    if (typeof document === "undefined") return undefined;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
   const headerClassName = glass ? "site-header site-header--glass" : "site-header";
 
   const getSectionId = (href) => (href?.startsWith("#") ? href.slice(1) : href);
+
+  const triggerBubble = (event) => {
+    const el = event.currentTarget;
+    el.classList.add("is-bubbling");
+    window.setTimeout(() => {
+      el.classList.remove("is-bubbling");
+    }, 620);
+  };
 
   const buildLinkClass = (sectionId) => {
     const base = "header-link";
@@ -47,6 +75,8 @@ export default function SiteHeader({
     if (onNavigate) onNavigate(dest);
     if (shouldClose) setOpen(false);
   };
+
+  const closeDrawer = () => setOpen(false);
 
   return (
     <header className={headerClassName}>
@@ -72,6 +102,7 @@ export default function SiteHeader({
                 key={l.href}
                 href={l.href}
                 className={`${buildLinkClass(sectionId)} ${l.cta ? 'header-link--cta bubbles' : ''}`}
+                onTouchStart={l.cta ? triggerBubble : undefined}
                 onClick={(event) => handleLinkClick(event, l.href)}
                 aria-current={sectionId === activeSection ? "page" : undefined}
               >
@@ -82,11 +113,14 @@ export default function SiteHeader({
           {/* Language toggle: shows the opposite flag (target language) */}
           <button
             type="button"
-            className="header-link lang-toggle"
+            className="header-link lang-toggle bubbles"
             aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
+            onTouchStart={triggerBubble}
             onClick={onToggleLang}
           >
-            <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+            <span className="text">
+              <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+            </span>
           </button>
         </nav>
 
@@ -117,9 +151,55 @@ export default function SiteHeader({
         </button>
       </div>
 
-      {open && (
-        <div className="site-header__drawer">
-          <nav className="site-header__drawer-nav" id="mobile-nav">
+      <div
+        className={`site-header__drawer ${open ? "is-open" : ""}`}
+        aria-hidden={!open}
+      >
+        <button
+          type="button"
+          className="site-header__drawer-backdrop"
+          onClick={closeDrawer}
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+        <nav
+          className="site-header__drawer-panel"
+          id="mobile-nav"
+          aria-hidden={!open}
+          tabIndex={open ? undefined : -1}
+        >
+          <div className="site-header__drawer-head">
+            <a
+              href="#home"
+              className="site-header__drawer-brand"
+              onClick={(event) => handleLinkClick(event, "#home", true)}
+            >
+              <img src={logo} alt={title} />
+            </a>
+            <button
+              type="button"
+              className="site-header__drawer-close"
+              onClick={closeDrawer}
+              aria-label={lang === 'fr' ? 'Fermer le menu' : 'Close menu'}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="site-header__drawer-nav">
             {links.map((l) => {
               const sectionId = getSectionId(l.href);
               return (
@@ -127,6 +207,7 @@ export default function SiteHeader({
                   key={l.href}
                   href={l.href}
                   className={`${buildLinkClass(sectionId)} header-link--mobile ${l.cta ? 'header-link--cta bubbles' : ''}`}
+                  onTouchStart={l.cta ? triggerBubble : undefined}
                   onClick={(event) => handleLinkClick(event, l.href, true)}
                   aria-current={sectionId === activeSection ? "page" : undefined}
                 >
@@ -136,15 +217,21 @@ export default function SiteHeader({
             })}
             <button
               type="button"
-              className="header-link header-link--mobile lang-toggle"
+              className="header-link header-link--mobile lang-toggle bubbles"
               aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
-              onClick={() => { onToggleLang && onToggleLang(); setOpen(false); }}
+              onTouchStart={triggerBubble}
+              onClick={() => {
+                onToggleLang && onToggleLang();
+                closeDrawer();
+              }}
             >
-              <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+              <span className="text">
+                <span className={`fi ${lang === 'fr' ? 'fi-gb' : 'fi-fr'}`} aria-hidden="true" />
+              </span>
             </button>
-          </nav>
-        </div>
-      )}
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }

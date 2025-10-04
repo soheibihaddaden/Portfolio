@@ -116,8 +116,16 @@ export default function SectionContact({ lang = "fr" }) {
       ? "hire-form__status"
       : `hire-form__status ${status.type === "success" ? "is-success" : "is-error"}`;
 
+  const phoneLabel = lang === 'en' ? 'Phone' : 'Téléphone';
+  const emailLabel = 'Email';
+  const addressLabel = lang === 'en' ? 'Address' : 'Adresse';
+  const CONTACT_EMAIL = 'ihaddadensoheib@gmail.com';
+  const CONTACT_PHONE = '(+33) 7 74 90 95 03';
+  const CONTACT_ADDRESS = 'paris 7500, france';
+
   return (
     <section id="contact" className="hire-section">
+      <div className="contact-layout">
       <form onSubmit={handleSubmit} className="hire-form">
         <div className="hire-section__intro">
           <span className="hire-section__title">{dict[lang]?.contact?.title || dict.fr.contact.title}</span>
@@ -238,6 +246,49 @@ export default function SectionContact({ lang = "fr" }) {
             : (dict[lang]?.contact?.submit || dict.fr.contact.submit)}
         </button>
       </form>
+
+      <aside className="contact-info" aria-label={lang === 'en' ? 'Contact details' : 'Coordonnées'}>
+        <div className="contact-line">
+          <span className="contact-line__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-icon lucide-phone">
+              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+            </svg>
+          </span>
+          <div className="contact-line__content">
+            <span className="contact-line__label">{phoneLabel}</span>
+            <span className="contact-line__value">{CONTACT_PHONE}</span>
+          </div>
+        </div>
+
+        <div className="contact-line">
+          <span className="contact-line__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail-icon lucide-mail">
+              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+            </svg>
+          </span>
+          <div className="contact-line__content">
+            <span className="contact-line__label">{emailLabel}</span>
+            <span className="contact-line__value">{CONTACT_EMAIL}</span>
+          </div>
+        </div>
+
+        <div className="contact-line">
+          <span className="contact-line__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin-house-icon lucide-map-pin-house">
+              <path d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z" />
+              <path d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2" />
+              <path d="M18 22v-3" />
+              <circle cx="10" cy="10" r="3" />
+            </svg>
+          </span>
+          <div className="contact-line__content">
+            <span className="contact-line__label">{addressLabel}</span>
+            <span className="contact-line__value">{CONTACT_ADDRESS}</span>
+          </div>
+        </div>
+      </aside>
+      </div>
     </section>
   );
 }
