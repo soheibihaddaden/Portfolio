@@ -5,7 +5,7 @@ export const dict = {
       iam: 'je suis',
       name: 'Ihaddaden Soheib',
       bio: "je suis étudiant à l'université de Paris Cité avec un fort intérêt pour les réseaux et la cybersécurité, avec de bonnes bases aussi en développement.",
-      ctas: { download: 'Download Resume', github: 'GitHub', linkedin: 'LinkedIn' },
+      ctas: { download: 'Télécharger CV', github: 'GitHub', linkedin: 'LinkedIn' },
       stats: {
         yearsL1: 'Années',
         yearsL2: "d'expérience",
