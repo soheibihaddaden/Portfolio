@@ -121,7 +121,7 @@ export default function SectionContact({ lang = "fr" }) {
   const addressLabel = lang === 'en' ? 'Address' : 'Adresse';
   const CONTACT_EMAIL = 'ihaddadensoheib@gmail.com';
   const CONTACT_PHONE = '(+33) 7 74 90 95 03';
-  const CONTACT_ADDRESS = 'paris 7500, france';
+  const CONTACT_ADDRESS = 'Paris, Ile de France';
 
   return (
     <section id="contact" className="hire-section">

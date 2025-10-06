@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { dict } from "../i18n";
 import photo from "../photo.png";
+import resumePdf from "../CV_IHADDADEN.pdf";
 
-/* Compteur 0 -> to (à chaque refresh ça repart de 0) */
+
 function CountUp({ to, duration = 1200, delay = 0, suffix = "" }) {
   const [val, setVal] = useState(0);
 
@@ -14,7 +15,7 @@ function CountUp({ to, duration = 1200, delay = 0, suffix = "" }) {
     const step = (ts) => {
       if (!start) start = ts;
       const t = Math.min(1, (ts - start) / d);
-      // easing cubic-out
+
       const eased = 1 - Math.pow(1 - t, 3);
       setVal(Math.round(to * eased));
       if (t < 1) raf = requestAnimationFrame(step);
@@ -31,19 +32,54 @@ function CountUp({ to, duration = 1200, delay = 0, suffix = "" }) {
 }
 
 export default function SectionHero({ lang = "fr" }) {
-  const tHero = (dict[lang]?.hero || dict.fr.hero);
+  const tHero = dict[lang]?.hero || dict.fr.hero;
 
-  // Libellés FR par défaut si tu n’as pas (encore) de clés i18n pour ces textes
-  const statsLabels = (dict[lang]?.stats) || {
+  const statsConfig = tHero.stats || {
     yearsL1: "Années",
     yearsL2: "d'expérience",
+    yearsValue: 5,
     projectsL1: "Projets",
     projectsL2: "complétés",
+    projectsValue: 5,
     techsL1: "Technologies",
     techsL2: "maîtrisées",
-    commitsL1: "commits de",
-    commitsL2: "code",
+    techsValue: 5,
+    challengesL1: "Challenges",
+    challengesL2: "réalisés",
+    challengesValue: 84,
+    challengesSuffix: "+",
   };
+
+  const heroStats = [
+    {
+      key: "years",
+      value: statsConfig.yearsValue ?? 5,
+      label1: statsConfig.yearsL1,
+      label2: statsConfig.yearsL2,
+      suffix: statsConfig.yearsSuffix || "",
+    },
+    {
+      key: "projects",
+      value: statsConfig.projectsValue ?? 5,
+      label1: statsConfig.projectsL1,
+      label2: statsConfig.projectsL2,
+      suffix: statsConfig.projectsSuffix || "",
+    },
+    {
+      key: "techs",
+      value: statsConfig.techsValue ?? 5,
+      label1: statsConfig.techsL1,
+      label2: statsConfig.techsL2,
+      suffix: statsConfig.techsSuffix || "",
+    },
+    {
+      key: "challenges",
+      value: statsConfig.challengesValue ?? 84,
+      label1: statsConfig.challengesL1,
+      label2: statsConfig.challengesL2,
+      suffix: statsConfig.challengesSuffix || "",
+    },
+  ];
 
   return (
     <section id="home" className="hero-section">
@@ -61,8 +97,12 @@ export default function SectionHero({ lang = "fr" }) {
           <p className="hero-bio">{tHero.bio}</p>
 
           <div className="hero-ctas">
-            {/* Bouton Download avec ton effet */}
-            <a className="hero-btn hero-btn--primary dl-btn" href="/cv.pdf" download>
+            {}
+            <a
+              className="hero-btn hero-btn--primary dl-btn"
+              href={resumePdf}
+              download
+            >
               <span className="dl-btn__text">{tHero.ctas.download}</span>
               <span className="dl-btn__icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" className="dl-btn__svg">
@@ -87,27 +127,25 @@ export default function SectionHero({ lang = "fr" }) {
         </div>
       </div>
 
-      {/* ── Barre de stats avec compteurs ── */}
+      {}
       <div className="hero-stats">
-        <div className="hero-stats__item">
-          <span className="hero-stats__num"><CountUp to={3} duration={1300} /></span>
-          <span className="hero-stats__label">{statsLabels.yearsL1}<br/>{statsLabels.yearsL2}</span>
-        </div>
-
-        <div className="hero-stats__item">
-          <span className="hero-stats__num"><CountUp to={10} duration={1400} delay={80} /></span>
-          <span className="hero-stats__label">{statsLabels.projectsL1}<br/>{statsLabels.projectsL2}</span>
-        </div>
-
-        <div className="hero-stats__item">
-          <span className="hero-stats__num"><CountUp to={5} duration={1200} delay={120} /></span>
-          <span className="hero-stats__label">{statsLabels.techsL1}<br/>{statsLabels.techsL2}</span>
-        </div>
-
-        <div className="hero-stats__item">
-          <span className="hero-stats__num"><CountUp to={493} duration={1500} delay={180} suffix="+" /></span>
-          <span className="hero-stats__label">{statsLabels.commitsL1}<br/>{statsLabels.commitsL2}</span>
-        </div>
+        {heroStats.map((stat, index) => (
+          <div key={stat.key} className="hero-stats__item">
+            <span className="hero-stats__num">
+              <CountUp
+                to={stat.value}
+                duration={1200 + index * 120}
+                delay={index * 80}
+                suffix={stat.suffix}
+              />
+            </span>
+            <span className="hero-stats__label">
+              {stat.label1}
+              <br />
+              {stat.label2}
+            </span>
+          </div>
+        ))}
       </div>
     </section>
   );

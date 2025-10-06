@@ -11,7 +11,7 @@ import { dict } from "./i18n";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
-  const [stage, setStage] = useState("idle"); // idle | in | mid | out
+  const [stage, setStage] = useState("idle"); 
   const [lang, setLang] = useState("fr");
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function App() {
     const OUT_TOTAL = 900;
 
     setTimeout(() => {
-      // Keep blue in place and animate grey on top, then reveal page
+  
       setActiveSection(next);
       setStage("mid");
       setTimeout(() => setStage("out"), 30);
@@ -72,11 +72,11 @@ export default function App() {
   const renderSection = () => {
     switch (activeSection) {
       case "cv":
-        return <SectionCV />;
+        return <SectionCV lang={lang} />;
       case "work":
-        return <SectionWork />;
+        return <SectionWork lang={lang} />;
       case "contact":
-        return <SectionContact />;
+        return <SectionContact lang={lang} />;
       case "home":
       default:
         return <SectionHero lang={lang} />;

@@ -1,33 +1,63 @@
-# Mon Portfolio – envoi du formulaire « Embauchez-moi »
+# Mon Portfolio
 
-Le formulaire utilise [FormSubmit](https://formsubmit.co/) pour envoyer un email directement à `ihaddadensoheib@gmail.com`. Aucun serveur n'est nécessaire.
+Mon Portfolio est une application React/Vite qui présente mon profil, mon expérience et mes projets personnels. Le site prend en charge deux langues (fr/en) et propose un formulaire de contact fonctionnel.
 
-## Étapes de configuration
+## Fonctionnalités principales
 
-1. Rendez-vous sur [formsubmit.co](https://formsubmit.co/) et envoyez une première soumission depuis le formulaire en mode développement. Vous recevrez un mail de confirmation : cliquez sur « Confirm » pour autoriser FormSubmit à vous transférer les messages.
-2. (Facultatif) Si vous souhaitez employer une autre adresse ou personnaliser le destinataire, définissez la variable d’environnement suivante dans un fichier `.env` à la racine du projet :
+- Section hero avec statistiques animées et téléchargement direct du CV (`src/CV_IHADDADEN.pdf`).
+- Parcours CV avec onglets (expérience, formation, compétences, à propos).
+- Page Travail regroupant les challenges Capture the Flag et mes projets académiques/personnels.
+- Formulaire de contact connecté à FormSubmit, avec validation côté client et messages d'état.
+- Interface responsive avec design accentué (mix CSS natif, variables personnalisées, effets).
 
-   ```bash
-   VITE_FORM_ENDPOINT=https://formsubmit.co/ajax/votre.adresse@email.com
-   ```
+## Stack et dépendances
 
-3. Redémarrez `npm run dev` si le serveur était déjà lancé.
+- **React 18** + **Vite** pour le bundling et le Hot Module Replacement.
+- **React i18next maison** via un simple dictionnaire (`src/i18n.js`).
+- **CSS vanilla** (fichier unique `src/global.css`) + polices Google Fonts.
+- **FormSubmit** pour la soumission du formulaire sans backend (`VITE_FORM_ENDPOINT`).
 
-Le code envoie automatiquement les champs `first_name`, `last_name`, `email`, `phone`, `contract_type`, `message` et ajoute un sujet personnalisé.
+### Scripts NPM
 
-Les instructions d'origine de Vite sont conservées ci-dessous pour référence.
+```bash
+npm install      # installe toutes les dépendances
+npm run dev      # lance le serveur de dev sur http://localhost:5173
+npm run build    # génère la version de production dans dist/
+npm run preview  # prévisualise la build (utile avant déploiement)
+```
 
----
+## Structure du projet
 
-# React + Vite
+```
+mon-portfolio/
+├── public/                # actifs statiques
+├── src/
+│   ├── components/        # SectionHero, SectionCV, SectionWork, etc.
+│   ├── i18n.js            # dictionnaire FR/EN
+│   ├── global.css         # styles globaux
+│   └── main.jsx           # point d'entrée React
+└── README.md
+```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Internationalisation
 
-Currently, two official plugins are available:
+Le dictionnaire `src/i18n.js` contient toutes les chaînes FR/EN, y compris les listes de challenges CTF et les données du CV. Pour ajouter une langue :
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Dupliquer les blocs `fr` ou `en`.
+2. Adapter les clefs (hero, cv, work, contact, etc.).
+3. Mettre à jour `lang` dans `App.jsx` ou ajouter un sélecteur de langue.
 
-## Expanding the ESLint configuration
+## Formulaire de contact
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Par défaut, les messages arrivent sur `ihaddadensoheib@gmail.com` via FormSubmit.
+- Pour changer de destinataire : créez un `.env` avec `VITE_FORM_ENDPOINT=https://formsubmit.co/ajax/votre-email`.
+- Les champs envoyés : `first_name`, `last_name`, `email`, `phone`, `contract_type`, `message`.
+
+## Déploiement
+
+1. `npm run build`
+2. Déployer le contenu du dossier `dist/` (Netlify, Vercel, GitHub Pages, OVH, etc.).
+
+## Licence
+
+Projet personnel – vous pouvez vous en inspirer mais merci de citer la source si vous le reprenez intégralement.

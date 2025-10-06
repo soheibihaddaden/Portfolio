@@ -69,10 +69,34 @@ export default function SectionCV({ lang = "fr" }) {
                 {section.groups.map((group) => (
                   <div key={group.heading} className="cv-skill-group">
                     <h3>{group.heading}</h3>
-                    <ul>
-                      {group.items.map((skill) => (
-                        <li key={skill}>{skill}</li>
-                      ))}
+                    <ul
+                      className={
+                        group.items.some(
+                          (item) =>
+                            typeof item === "object" && item !== null && item.iconClass
+                        )
+                          ? "cv-skill-list cv-skill-list--grid"
+                          : "cv-skill-list"
+                      }
+                    >
+                      {group.items.map((skill) => {
+                        const isObject = typeof skill === "object" && skill !== null;
+                        const label = isObject ? skill.label : skill;
+                        return (
+                          <li
+                            key={label}
+                            className={isObject && skill.iconClass ? "cv-skill" : undefined}
+                          >
+                            {isObject && skill.iconClass ? (
+                              <i
+                                className={`cv-skill__icon ${skill.iconClass}`}
+                                aria-hidden="true"
+                              />
+                            ) : null}
+                            <span>{label}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
