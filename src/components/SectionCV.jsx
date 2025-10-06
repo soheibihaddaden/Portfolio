@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { dict } from "../i18n";
 import resumePdf from "../CV_IHADDADEN.pdf";
 
@@ -7,6 +7,25 @@ const TAB_KEYS = ["experience", "education", "skills", "about"];
 export default function SectionCV({ lang = "fr" }) {
   const tCV = useMemo(() => dict[lang]?.cv || dict.fr.cv, [lang]);
   const [activeTab, setActiveTab] = useState(TAB_KEYS[0]);
+  const contentRef = useRef(null);
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    const shouldScroll = typeof window !== "undefined" ? window.innerWidth <= 900 : false;
+
+    if (!shouldScroll) {
+      hasMounted.current = true;
+      return;
+    }
+
+    if (hasMounted.current) {
+      contentRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      hasMounted.current = true;
+    }
+  }, [activeTab]);
 
   const section = tCV.sections[activeTab];
   const navLabel = lang === "fr" ? "Sections du CV" : "Resume sections";
@@ -44,7 +63,12 @@ export default function SectionCV({ lang = "fr" }) {
             ))}
           </nav>
 
-          <div className="cv-content" role="region" aria-live="polite">
+          <div
+            ref={contentRef}
+            className="cv-content"
+            role="region"
+            aria-live="polite"
+          >
             {section.intro && <p className="cv-intro">{section.intro}</p>}
 
             {activeTab === "experience" || activeTab === "education" ? (

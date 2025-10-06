@@ -360,19 +360,24 @@ export const dict = {
           intro: 'My academic degrees and training.',
           items: [
             {
-              title: 'MSc Networks & Autonomous Systems',
+              title: 'Master Networks & Autonomous Systems',
               place: 'Université de Paris Cité',
               period: '2024 – 2026',
             },
             {
-              title: 'BSc Computer Science',
+              title: 'License (Bachelor\'s Degree) Computer Science',
               place: 'Université de Haute Alsace',
               period: '2023 – 2024',
             },
             {
-              title: 'MSc Networks & Distributed Systems',
+              title: 'Master Networks & Distributed Systems',
               place: 'USTHB – Houari Boumediene University',
               period: '2022 – 2023',
+            },
+            {
+              title: 'License (Bachelor\'s Degree) Computer Science',
+              place: 'USTHB – Houari Boumediene University',
+              period: '2019 – 2022',
             },
           ],
         },

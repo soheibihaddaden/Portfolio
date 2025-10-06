@@ -1492,6 +1492,7 @@ textarea {
   box-shadow: var(--shadow-lg);
   display: grid;
   gap: clamp(18px, 4vw, 24px);
+  scroll-margin-top: clamp(80px, 14vh, 140px);
 }
 
 .cv-intro {
