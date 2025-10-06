@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { dict } from "../i18n";
+import resumePdf from "../CV_IHADDADEN.pdf";
 
 const TAB_KEYS = ["experience", "education", "skills", "about"];
 
@@ -15,7 +16,7 @@ export default function SectionCV({ lang = "fr" }) {
       <div className="cv-shell">
         <div className="cv-header">
           <h2 className="cv-title">{section.title}</h2>
-          <a className="cv-download" href="/cv.pdf" download>
+          <a className="cv-download" href={resumePdf} download>
             <span>{tCV.downloadLabel}</span>
             <svg
               aria-hidden="true"
