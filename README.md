@@ -53,11 +53,65 @@ Le dictionnaire `src/i18n.js` contient toutes les chaînes FR/EN, y compris les 
 - Pour changer de destinataire : créez un `.env` avec `VITE_FORM_ENDPOINT=https://formsubmit.co/ajax/votre-email`.
 - Les champs envoyés : `first_name`, `last_name`, `email`, `phone`, `contract_type`, `message`.
 
-## Déploiement
+## Déploiement sur GitHub Pages
 
-1. `npm run build`
-2. Déployer le contenu du dossier `dist/` (Netlify, Vercel, GitHub Pages, OVH, etc.).
+### 1. Préparer la build
+
+```bash
+npm run build
+```
+
+Le dossier `dist/` sera généré avec les assets optimisés.
+
+### 2. Déployer avec GitHub Actions (recommandé)
+
+1. Créez un dépôt GitHub et poussez le code (`main` ou `master`).
+2. Activez GitHub Pages dans les settings (Section *Pages* → Source `GitHub Actions`).
+3. Ajoutez un workflow comme `./.github/workflows/deploy.yml` contenant :
+
+   ```yaml
+   name: Deploy to GitHub Pages
+
+   on:
+     push:
+       branches: [ main ]
+
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v4
+         - uses: actions/setup-node@v4
+           with:
+             node-version: 18
+         - run: npm ci
+         - run: npm run build
+         - name: Deploy
+           uses: peaceiris/actions-gh-pages@v3
+           with:
+             github_token: ${{ secrets.GITHUB_TOKEN }}
+             publish_dir: dist
+   ```
+
+4. Commitez le fichier, poussez et laissez l’action générer le site. Le lien public sera `https://<votre-utilisateur>.github.io/<nom-du-depot>/`.
+
+### 3. Déploiement manuel
+
+Si vous préférez une approche manuelle :
+
+```bash
+npm run build
+cd dist
+git init
+git remote add origin https://github.com/<utilisateur>/<repo>.git
+git checkout -b main
+git add .
+git commit -m "Deploy"
+git push -f origin main
+```
+
+Ensuite, activez GitHub Pages pour la branche `main` du dossier `dist`.
 
 ## Licence
 
-Projet personnel – vous pouvez vous en inspirer mais merci de citer la source si vous le reprenez intégralement.
+Projet personnel – merci de citer la source si vous le reprenez intégralement.
