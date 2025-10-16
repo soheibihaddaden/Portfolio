@@ -162,6 +162,13 @@ export const dict = {
       overview: 'Défis CTF  et projets personnels pour élargir mon champ de compétences.',
       title: 'Capture the Flag',
       intro: 'Challenges réalisés sur Root Me',
+      certificationTitle: 'Certifications',
+      certificationIntro: 'Formations en ligne validées récemment pour consolider mes compétences.',
+      certificationCTA: {
+        openLabel: 'Afficher les certificats',
+        closeLabel: 'Masquer les certificats',
+        note: 'Cliquez sur le bouton pour ouvrir ou masquer la liste détaillée.',
+      },
       projectTitle: 'Projets académiques et personnels',
       projectIntro: 'Mises en pratique réalisées durant mes études ou en autonomie.',
       sections: [
@@ -265,6 +272,26 @@ export const dict = {
             'API - Broken Access',
             'Fichier de sauvegarde',
             'HTTP - Directory indexing',
+          ],
+        },
+        {
+          title: 'Certifications en ligne',
+          type: 'certifications',
+          challenges: [
+            {
+              label: 'Simplilearn – Certification React en ligne',
+              description: 'Programme complet couvrant les fondamentaux et bonnes pratiques de React.',
+              assetKey: 'reactCertificate',
+              actionLabel: 'Ouvrir le certificat (PNG)',
+              previewAlt: 'Certificat de fin de cours React Simplilearn',
+            },
+            {
+              label: "LinkedIn Learning Premium – Certification Docker l’essentiel",
+              description: 'Formation sur la conteneurisation et les workflows DevOps avec Docker.',
+              assetKey: 'dockerCertificate',
+              actionLabel: "Ouvrir le certificat (image)",
+              previewAlt: 'Certificat Docker LinkedIn Learning Premium',
+            },
           ],
         },
         {
@@ -461,6 +488,13 @@ export const dict = {
       overview: 'CTF training and side projects to broaden my skills.',
       title: 'Capture the Flag',
       intro: 'Ongoing Root Me challenges that I am tackling to sharpen my offensive security skills.',
+      certificationTitle: 'Certifications',
+      certificationIntro: 'Recently completed online courses that strengthen my technical toolkit.',
+      certificationCTA: {
+        openLabel: 'Show the certificates',
+        closeLabel: 'Hide the certificates',
+        note: 'Use the toggle to expand or collapse the detailed list.',
+      },
       projectTitle: 'Academic & Personal Projects',
       projectIntro: 'Hands-on experiments carried out during my studies or on my own.',
       sections: [
@@ -564,6 +598,26 @@ export const dict = {
             'API - Broken Access',
             'Backup file',
             'HTTP - Directory indexing',
+          ],
+        },
+        {
+          title: 'Online certifications',
+          type: 'certifications',
+          challenges: [
+            {
+              label: 'Simplilearn – React online course certificate',
+              description: 'Comprehensive program on React fundamentals and best practices.',
+              assetKey: 'reactCertificate',
+              actionLabel: 'Open certificate (PNG)',
+              previewAlt: 'Simplilearn React completion certificate',
+            },
+            {
+              label: 'LinkedIn Learning Premium – Docker Essential Training certificate',
+              description: 'Docker essentials covering containerisation workflows and DevOps use cases.',
+              assetKey: 'dockerCertificate',
+              actionLabel: 'Open certificate (image)',
+              previewAlt: 'LinkedIn Learning Docker certificate',
+            },
           ],
         },
         {
