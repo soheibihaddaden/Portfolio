@@ -292,6 +292,13 @@ export const dict = {
               actionLabel: "Ouvrir le certificat (image)",
               previewAlt: 'Certificat Docker LinkedIn Learning Premium',
             },
+            {
+              label: 'LinkedIn Learning – Windows Server 2022 : Active Directory et stratégies de groupe',
+              description: 'Administration des rôles AD DS, gestion des stratégies de groupe et sécurisation d’un environnement Windows Server 2022.',
+              assetKey: 'windowsServerCertificate',
+              actionLabel: "Ouvrir le certificat (image)",
+              previewAlt: 'Certificat Windows Server 2022 LinkedIn Learning',
+            },
           ],
         },
         {
@@ -617,6 +624,13 @@ export const dict = {
               assetKey: 'dockerCertificate',
               actionLabel: 'Open certificate (image)',
               previewAlt: 'LinkedIn Learning Docker certificate',
+            },
+            {
+              label: 'LinkedIn Learning – Windows Server 2022: Active Directory and Group Policy',
+              description: 'Managing AD DS roles, configuring group policies, and securing Windows Server 2022 environments.',
+              assetKey: 'windowsServerCertificate',
+              actionLabel: 'Open certificate (image)',
+              previewAlt: 'LinkedIn Learning Windows Server 2022 certificate',
             },
           ],
         },

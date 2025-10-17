@@ -2,10 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { dict } from "../i18n";
 import reactCertificateImg from "../REACT_CERTIF.png";
 import dockerCertificateImg from "../CertificatDaccomplissement_Lessentiel de Docker_page-0001.jpg";
+import windowsServerCertificateImg from "../CertificatDaccomplissement_Windows Server 2022 Active Directory et les strategies de groupe_page-0001.jpg";
 
 const certificationAssets = {
   reactCertificate: { href: reactCertificateImg, type: "image" },
   dockerCertificate: { href: dockerCertificateImg, type: "image" },
+  windowsServerCertificate: { href: windowsServerCertificateImg, type: "image" },
 };
 
 export default function SectionWork({ lang = "fr" }) {

@@ -3,7 +3,6 @@ import { dict } from "../i18n";
 import photo from "../photo.png";
 import resumePdf from "../CV_IHADDADEN.pdf";
 
-
 function CountUp({ to, duration = 1200, delay = 0, suffix = "" }) {
   const [val, setVal] = useState(0);
 
