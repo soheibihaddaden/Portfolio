@@ -282,7 +282,7 @@ export const dict = {
               label: 'Simplilearn – Certification React en ligne',
               description: 'Programme complet couvrant les fondamentaux et bonnes pratiques de React.',
               assetKey: 'reactCertificate',
-              actionLabel: 'Ouvrir le certificat (PNG)',
+              actionLabel: 'Ouvrir le certificat (image)',
               previewAlt: 'Certificat de fin de cours React Simplilearn',
             },
             {
